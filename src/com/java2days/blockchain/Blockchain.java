@@ -53,8 +53,17 @@ public class Blockchain {
     public void submitBlock(Block newBlock) {
         if (isValidBlock(newBlock)) {
             blocks.add(newBlock);
+            refreshPendingTransactions(newBlock);
         } else {
             throw new IllegalArgumentException("Invalid block");
+        }
+    }
+
+    private void refreshPendingTransactions(Block newBlock) {
+        for (Transaction t : newBlock.getTransactions()) {
+            if (this.pendingTransactions.contains(t)) {
+                this.pendingTransactions.remove(t);
+            }
         }
     }
 
